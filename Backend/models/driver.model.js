@@ -21,26 +21,41 @@ const driverSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+    },
+    role:{
+      type:String,
+      required:true,
     },
     isAvailable: {
       type: Boolean,
-      required: true,
       default: true,
     },
     vehicle: {
-      type: String,
-      required: true,
+      vehiclePlate:{
+        type:String,
+        required:true,
+      },
+      vehicleColor:{
+        type:String,
+        required:true,
+      },
+      vehicleCapacity:{
+        type:String,
+        required:true,
+      },
+      vehicleType:{
+        type:String,
+        required:true,
+      }
     },
     location: {
       type: {
         type: String,
         enum: ["Point"],
-        default: "Point",
       },
       coordinates: {
         type: [Number],
-        required: true,
+
       },
     },
   },
@@ -49,7 +64,10 @@ const driverSchema = new mongoose.Schema(
   }
 );
 
-driverSchema.index({ location: "2dsphere" });
+driverSchema.index(
+  { location: "2dsphere" },
+  { partialFilterExpression: { "location.coordinates": { $exists: true, $ne: [] } } }
+);
 
 driverSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
