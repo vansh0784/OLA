@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import logo from "../assets/olalogo.png";
 import map from "../assets/map.png";
+import LocationSearchPanel from "../components/LocationSearchPanel";
+
+import VehiclePanel from "../components/VehiclePanel";
+import ConfirmPanel from "../components/ConfirmPanel";
 
 const Home = () => {
   const [isFocused, setIsFocused] = useState(false);
-  const [pickup, setpickup] = useState('');
-  const [destination, setdestination] = useState('')
-  const handleSubmit=(e)=>{
+  const [vehiclePanel, setvehiclePanel] = useState(false);
+  const [pickup, setpickup] = useState("");
+  const [destination, setdestination] = useState("");
+  const [confirmPanel, setConfirmPanel] = useState(false);
+  const handleSubmit = (e) => {
     e.preventDefault();
-  }
-  const dummySuggestions = [
-    "Home - 123 Main Street",
-    "Work - 456 Office Plaza",
-    "Gym - 789 Fitness Ave",
-    "Favorite Cafe - 101 Coffee Blvd",
-  ];
+  };
+
   return (
     <div
       className="relative h-[90vh] bg-cover bg-center transition-all duration-300"
@@ -34,15 +35,20 @@ const Home = () => {
           }`}
         >
           <h1 className="text-2xl font-bold mb-4">
-            <h3 className="absolute top-4 right-6"><i className="ri-arrow-down-wide-line text-gray-700 text-2xl" onClick={()=>setIsFocused(!isFocused)}></i></h3>
+            <h3 className="absolute top-4 right-6">
+              <i
+                className="ri-arrow-down-wide-line text-gray-700 text-2xl"
+                onClick={() => setIsFocused(!isFocused)}
+              ></i>
+            </h3>
             Find a Trip
           </h1>
 
-          <form onSubmit={(e)=>handleSubmit(e)}>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <input
               type="text"
               value={pickup}
-              onChange={(e)=>setpickup(e.target.value)}
+              onChange={(e) => setpickup(e.target.value)}
               placeholder="Add a pick-up location"
               className="w-full px-7 py-2 mb-4 bg-[#eeeeee] border border-gray-300 rounded focus:ring-2 text-sm focus:ring-black"
               onFocus={() => setIsFocused(true)}
@@ -50,7 +56,7 @@ const Home = () => {
             <input
               type="text"
               value={destination}
-              onChange={(e)=>setdestination(e.target.value)}
+              onChange={(e) => setdestination(e.target.value)}
               placeholder="Enter your destination"
               className="w-full px-7 py-2 mb-4 bg-[#eeeeee] border border-gray-300 rounded focus:ring-2 text-sm focus:ring-black"
               onFocus={() => setIsFocused(true)}
@@ -58,19 +64,19 @@ const Home = () => {
           </form>
 
           {isFocused && (
-            <div className="mt-4">
-              <h2 className="text-md font-semibold mb-2">Suggestions</h2>
-              <ul className="text-sm text-gray-700">
-                {dummySuggestions.map((item, idx) => (
-                  <li key={idx} className="py-2 border-b border-gray-200">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <LocationSearchPanel
+              vehiclePanel={vehiclePanel}
+              setvehiclePanel={setvehiclePanel}
+              setIsFocused={setIsFocused}
+            />
           )}
         </div>
       </div>
+      {vehiclePanel && <VehiclePanel vehiclePanel={vehiclePanel}
+              setvehiclePanel={setvehiclePanel} confirmPanel={confirmPanel} setConfirmPanel={setConfirmPanel} />}
+      {
+        confirmPanel&&<ConfirmPanel/>
+      }
     </div>
   );
 };
