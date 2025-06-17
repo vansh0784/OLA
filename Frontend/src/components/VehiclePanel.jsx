@@ -2,95 +2,86 @@ import React from "react";
 import car from "../assets/newcar.jpg";
 import bike from "../assets/motorbike.webp";
 import rickshaw from "../assets/rickshaw.webp";
-const VehiclePanel = (props) => {
-  console.log(props)
+import { useTrip } from "../context/TripContext";
+
+const VehiclePanel = () => {
+  const { setvehiclePanel, setConfirmPanel } = useTrip();
+
+  const vehicles = [
+    {
+      type: "OlaGo",
+      seats: 4,
+      eta: "2 mins",
+      time: "15:24",
+      price: "₹ 193.26",
+      img: car,
+      description: "Affordable, compact rides",
+    },
+    {
+      type: "Rickshaw",
+      seats: 3,
+      eta: "2 mins",
+      time: "15:24",
+      price: "₹ 143.26",
+      img: rickshaw,
+      description: "Affordable, compact rides",
+    },
+    {
+      type: "Bike",
+      seats: 2,
+      eta: "2 mins",
+      time: "15:24",
+      price: "₹ 93.26",
+      img: bike,
+      description: "Affordable, compact rides",
+    },
+  ];
+
+  const handleVehicleClick = () => {
+    setvehiclePanel(false);
+    setConfirmPanel(true);
+  };
+
   return (
-    <div className="absolute bottom-0 left-0 w-full px-5 py-3 bg-white h-[55%] z-100">
+    <div className="absolute bottom-0 left-0 w-full px-5 py-3 bg-white h-[55%] z-[100]">
       <div>
-        <h1 className="text-2xl font-bold mb-4">
-          <h3 className="absolute top-4 right-6">
-            <i
-              className="ri-arrow-down-wide-line text-gray-700 text-2xl"
-              onClick={() => props.setvehiclePanel(!props.vehiclePanel)}
-            ></i>
-          </h3>
-          Choose vehicle
-        </h1>
-        <div onClick={()=>props.setvehiclePanel(!props.vehiclePanel)}>
-          <div onClick={()=>{
-            props.setConfirmPanel(!props.confirmPanel)
-          }} className="flex items-start justify-between mb-2 border-gray-100 hover:border-black cursor-pointer border-3 rounded-xl py-2 px-2  ">
-            <img className="h-10 object-cover" src={car} alt="car" />
-            <div className="flex flex-col items-start justify-center">
-              <h1>
-                <h2 className="font-bold text-lg">
-                  OlaGo{" "}
-                  <span className="text-sm">
-                    <i className="ri-user-6-fill text-lg"></i>4
-                  </span>
-                </h2>
-              </h1>
-              <h1 className="text-sm">
-                2 mins away <span>15:24</span>
-              </h1>
-              <p className="text-gray-600 text-xs">
-                {" "}
-                Affordable, compact rides
-              </p>
-            </div>
-            <h1 className="font-bold text-lg">₹ 193.26</h1>
-          </div>
-          <div onClick={()=>{
-            props.setConfirmPanel(!props.confirmPanel)
-          }}  className="flex items-start justify-between mb-2 border-gray-100 hover:border-black cursor-pointer border-3 rounded-xl py-2 px-2 ">
-            <img
-              className="h-11 object-cover"
-              src={rickshaw}
-              alt="auto-rickshaw"
-            />
-            <div className="flex flex-col items-start justify-center">
-              <h1>
-                <h2 className="font-bold text-lg">
-                  Rickshaw{" "}
-                  <span className="text-sm">
-                    <i className=" text-lg ri-user-6-fill"></i>3
-                  </span>
-                </h2>
-              </h1>
-              <h1 className="text-sm">
-                2 mins away <span>15:24</span>
-              </h1>
-              <p className="text-gray-600 text-xs">
-                {" "}
-                Affordable, compact rides
-              </p>
-            </div>
-            <h1 className="font-bold text-lg">₹ 143.26</h1>
-          </div>
-          <div onClick={()=>{
-            props.setConfirmPanel(!props.confirmPanel)
-          }}  className="flex items-start justify-between mb-2 hover:border-black cursor-pointer border-gray-100 border-3 rounded-xl p-2   ">
-            <img className="h-11 object-cover" src={bike} alt="bike" />
-            <div className="flex flex-col items-start justify-start">
-              <h1>
-                <h2 className="font-bold text-lg">
-                  Bike{" "}
-                  <span className="text-sm">
-                    <i className="ri-user-6-fill text-lg"></i>2
-                  </span>
-                </h2>
-              </h1>
-              <h1 className="text-sm">
-                2 mins away . <span>15:24</span>
-              </h1>
-              <p className="text-gray-600 text-xs">
-                {" "}
-                Affordable, compact rides
-              </p>
-            </div>
-            <h1 className="font-bold text-lg">₹ 93.26</h1>
-          </div>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold">Choose vehicle</h1>
+          <button
+            type="button"
+            className="absolute top-4 right-6"
+            onClick={() => setvehiclePanel(false)}
+            aria-label="Close vehicle panel"
+          >
+            <i className="ri-arrow-down-wide-line text-gray-700 text-2xl"></i>
+          </button>
         </div>
+
+        {vehicles.map((vehicle) => (
+          <div
+            key={vehicle.type}
+            onClick={handleVehicleClick}
+            role="button"
+            tabIndex={0}
+            className="flex items-start justify-between mb-2 border-gray-100 hover:border-black border-3 rounded-xl p-2 cursor-pointer transition-transform hover:scale-[1.01]"
+          >
+            <img className="h-11 object-cover" src={vehicle.img} alt={vehicle.type} />
+            <div className="flex flex-col items-start justify-center flex-1 px-3">
+              <p className="font-bold text-lg">
+                {vehicle.type}{" "}
+                <span className="text-sm">
+                  <i className="ri-user-6-fill text-lg"></i>
+                  {vehicle.seats}
+                </span>
+              </p>
+              <p className="text-sm">
+                {vehicle.eta} <span>{vehicle.time}</span>
+              </p>
+              <p className="text-gray-600 text-xs">{vehicle.description}</p>
+            </div>
+            <p className="font-bold text-lg">{vehicle.price}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

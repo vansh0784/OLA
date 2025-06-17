@@ -8,12 +8,13 @@ import UserContext from "./context/UserContext.jsx";
 import DriverContext from "./context/driverContext.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <DriverContext>
+  <DriverContext>
     <UserContext>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </UserContext>
-    </DriverContext>
-  </StrictMode>
+  </DriverContext>
+</StrictMode>
+
 );

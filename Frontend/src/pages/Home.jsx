@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../assets/olalogo.png";
 import map from "../assets/map.png";
 import LocationSearchPanel from "../components/LocationSearchPanel";
-
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmPanel from "../components/ConfirmPanel";
+import LookingForDriver from "../components/LookingForDriver";
+import { useTrip } from "../context/TripContext";
 
 const Home = () => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [vehiclePanel, setvehiclePanel] = useState(false);
-  const [pickup, setpickup] = useState("");
-  const [destination, setdestination] = useState("");
-  const [confirmPanel, setConfirmPanel] = useState(false);
+  const {
+    isFocused, setIsFocused,
+    vehiclePanel,
+    pickup, setpickup,
+    destination, setdestination,
+    confirmPanel,
+    lookDriver,
+  } = useTrip();
+
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -23,28 +28,30 @@ const Home = () => {
     >
       <img src={logo} alt="ola-logo" className=" left-4 top-4 absolute h-8" />
 
-      <div className="absolute bottom-0 left-0 w-full ">
+      <div className="absolute bottom-0 left-0 w-full">
         <div
           className={`absolute w-1 h-[50px] bg-gray-900 ${
-            isFocused == true ? "top-[13%]" : "top-[40%]"
-          }  left-7 rounded-full`}
+            isFocused ? "top-[13%]" : "top-[40%]"
+          } left-7 rounded-full`}
         ></div>
+
         <div
           className={`transition-all duration-300 bg-gray-50 p-4 rounded-t-2xl z-40 w-full ${
             isFocused ? "h-[90vh]" : "h-[30vh]"
           }`}
         >
-          <h1 className="text-2xl font-bold mb-4">
-            <h3 className="absolute top-4 right-6">
-              <i
-                className="ri-arrow-down-wide-line text-gray-700 text-2xl"
-                onClick={() => setIsFocused(!isFocused)}
-              ></i>
-            </h3>
-            Find a Trip
-          </h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold">Find a Trip</h1>
+            <button
+              type="button"
+              className="absolute top-4 right-6"
+              onClick={() => setIsFocused(!isFocused)}
+            >
+              <i className="ri-arrow-down-wide-line text-gray-700 text-2xl"></i>
+            </button>
+          </div>
 
-          <form onSubmit={(e) => handleSubmit(e)}>
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
               value={pickup}
@@ -63,20 +70,13 @@ const Home = () => {
             />
           </form>
 
-          {isFocused && (
-            <LocationSearchPanel
-              vehiclePanel={vehiclePanel}
-              setvehiclePanel={setvehiclePanel}
-              setIsFocused={setIsFocused}
-            />
-          )}
+          {isFocused && <LocationSearchPanel />}
         </div>
       </div>
-      {vehiclePanel && <VehiclePanel vehiclePanel={vehiclePanel}
-              setvehiclePanel={setvehiclePanel} confirmPanel={confirmPanel} setConfirmPanel={setConfirmPanel} />}
-      {
-        confirmPanel&&<ConfirmPanel/>
-      }
+
+      {vehiclePanel && <VehiclePanel />}
+      {confirmPanel && <ConfirmPanel />}
+      {lookDriver && <LookingForDriver />}
     </div>
   );
 };
